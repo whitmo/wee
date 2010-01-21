@@ -22,11 +22,9 @@ class TestExceptions(BaseCase):
     app = TestApp(application)
     
     def test_error(self):
-        try:
-            res = self.app.get("/pony")
-        except AppError, e:
-            assert e.args[0].startswith("Bad response: 404 Not Found")
-
+        res = self.app.get("/pony", status=404)
+        assert res.status_int == 404
+    
     def test_redirect(self):
         res = self.app.get("/over-there")
         assert res.status == '302 Found'
