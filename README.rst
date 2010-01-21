@@ -22,32 +22,30 @@ Basic Usage
 Here is a super simple pony app to show the basics of wee.  Pretty
 much the same as itty except we use full regex strings::
 
+     import wee
+     from wsgiref.simple_server import make_server
 
-import wee
-from wsgiref.simple_server import make_server
-
-@wee.get(r'^/$')
-def ponytime(request):
-    return "It's Pony time!"
-
-
-@wee.post(r'^/$'):
-def make_pony(request):
-    ... make a pony ...
+     @wee.get(r'^/$')
+     def ponytime(request):
+         return "It's Pony time!"
 
 
-@wee.put('^/(?P<pony_name>\w+)$'):
-def add_unicorn_horn(request, pony_name=None):
-    ... change a pony ...
+     @wee.post(r'^/$'):
+     def make_pony(request):
+         ... make a pony ...
 
 
-@wee.delete('^/(?P<pony_name>\w+)$'):
-def kill_a_pony(request, pony_name):
-    ... delete a pony ...
+     @wee.put('^/(?P<pony_name>\w+)$'):
+     def add_unicorn_horn(request, pony_name=None):
+         ... change a pony ...
 
 
-srv = make_server(host, port, wee.make_simple_application())
-srv.serve_forever()
+     @wee.delete('^/(?P<pony_name>\w+)$'):
+     def kill_a_pony(request, pony_name):
+         ... delete a pony ...
+
+     srv = make_server(host, port, wee.make_simple_application())
+     srv.serve_forever()
 
 
 
