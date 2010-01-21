@@ -80,19 +80,24 @@ class Verb(object):
                     return cls.handlers[key](request, **match.groupdict())
 
     
+
 class get(Verb):
     """ the get """
     handlers = dict()
+
 
 class post(Verb):
     """ the post """
     handlers = dict()
 
+
 class delete(Verb):
     handlers = dict()
 
+
 class put(Verb):
     handlers = dict()
+
 
 VERB = dict(POST=post,
             GET=get,
