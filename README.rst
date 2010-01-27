@@ -44,7 +44,7 @@ much the same as itty except we use full regex strings::
      def kill_a_pony(request, pony_name):
          ... delete a pony ...
 
-     srv = make_server(host, port, wee.make_simple_application())
+     srv = make_server(host, port, wee.make_app())
      srv.serve_forever()
 
 
