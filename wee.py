@@ -7,14 +7,17 @@ import sys
 
 def handle_request(environ, start_response, module=None, request_class=Request, response_class=Response):
     """The main handler. Dispatches to the user's code."""
+    request = request_class(environ)
     try:
-        request = request_class(environ)
         verb = VERB.get(request.method)
         response = verb.dispatch(request, module)
         if response is None:
             raise exc.HTTPNotFound()
-    except Exception, e:
+    
+    except exc.WSGIHTTPException, e:
         return e(environ, start_response)
+    except Exception, e:
+        return exc.HTTPServerError('Server Error')
     
     if isinstance(response, basestring):
         response = response_class(response)
@@ -38,6 +41,16 @@ def make_simple_app(module=None, which_r=None):
         global Request, Response
     return functools.partial(handle_request, module=module, request_class=Request, response_class=Response)
 
+def make_app(module=None):
+    """
+    Module name may be specified, otherwhise we stack jump and use the
+    one where this function is called.
+    
+    """
+    if module is None:
+        module = sys._getframe(1).f_globals['__name__']
+    
+    return functools.partial(handle_request, module=module, request_class=Request, response_class=Response)
 
 def handle_error(exception, request):
     """
