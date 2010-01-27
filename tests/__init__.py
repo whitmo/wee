@@ -47,15 +47,7 @@ class TestWee(BaseCase):
 class TestSimpleAppFactory(BaseCase):
 
     def test_self_scoping(self):
-        app = TestApp(wee.make_simple_app())
+        app = TestApp(wee.make_app())
         self.cmp(app.get("/").status, "200 OK")
 
-    try:
-        import werkzeug
-        def test_wz_app(self):
-            app = TestApp(wee.make_simple_app())
-            self.cmp(app.get("/").status, "200 OK")
-    except ImportError:
-        import warnings
-        warnings.warn("Not running Werkzeug test. No big deal.")
             

@@ -78,15 +78,6 @@ totally contained in itself w/ no dependencies that requires little
 configuration that you want to run as quickly as possible.
 
 
-Werkzeug Support
-================
-
-`wee.make_simple_application` has a werkzeug flag that creates an
-application that uses the Werkzeug Request and Response rather than
-the default Webob one.  This is more experiment than the very
-experimental experiment that wee is.
-
-
 Credits
 =======
 

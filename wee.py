@@ -25,7 +25,7 @@ def handle_request(environ, start_response, module=None, request_class=Request, 
     return response(environ, start_response)
 
 
-def make_simple_app(module=None, which_r=None):
+def make_app(module=None):
     """
     Module name may be specified, otherwhise we stack jump and use the
     one where this function is called.
@@ -35,22 +35,8 @@ def make_simple_app(module=None, which_r=None):
     """
     if module is None:
         module = sys._getframe(1).f_globals['__name__']
-    if which_r == 'wz':
-        from werkzeug import Request, Response
-    else:
-        global Request, Response
     return functools.partial(handle_request, module=module, request_class=Request, response_class=Response)
 
-def make_app(module=None):
-    """
-    Module name may be specified, otherwhise we stack jump and use the
-    one where this function is called.
-    
-    """
-    if module is None:
-        module = sys._getframe(1).f_globals['__name__']
-    
-    return functools.partial(handle_request, module=module, request_class=Request, response_class=Response)
 
 def handle_error(exception, request):
     """
