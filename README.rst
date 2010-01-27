@@ -72,10 +72,10 @@ Wait I'm Confused ...
 You probably shouldn't use either.  This is an experiment, so seems to
 be itty.
 
-If you are brave though, use wee when you want to do some itty like,
-but are using Webob. Use itty when you want some totally contained in itself w/ no
-dependencies that requires little configuration that you want to run
-as quickly as possible.
+If you are brave though, use `wee` when you want to do some itty or
+sinatra like, but are using Webob. Use `itty` when you want some
+totally contained in itself w/ no dependencies that requires little
+configuration that you want to run as quickly as possible.
 
 
 Werkzeug Support
@@ -86,3 +86,11 @@ application that uses the Werkzeug Request and Response rather than
 the default Webob one.  This is more experiment than the very
 experimental experiment that wee is.
 
+
+Credits
+=======
+
+`Daniel Lindsley <http://www.toastdriven.com/fresh/>`_ -- Author of `itty
+<http://github.com/toastdriven/itty/>`_
+
+Matt George and Whit Morriss --  Ax work on Wee
