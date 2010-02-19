@@ -24,7 +24,9 @@ class BaseCase(unittest.TestCase):
     def cmp(self, have, want):
         assert have == want, "\n%s != \n%s" %(have, want) 
 
+
 application = functools.partial(wee.handle_request, module='tests')
+
 
 class TestWee(BaseCase):
     app = TestApp(application)
@@ -43,7 +45,13 @@ class TestWee(BaseCase):
         self.cmp(res.status, '200 OK')
         self.cmp(res.body, "I'm a post") 
 
+new_reg = wee.DispatchRegistry()
+sandboxed = wee.make_app(registry=new_reg)
 
+class TestSBWee(TestWee):
+    app = TestApp(sandboxed)
+
+    
 class TestSimpleAppFactory(BaseCase):
 
     def test_self_scoping(self):
