@@ -15,6 +15,6 @@ setup(name='wee',
       include_package_data=True,
       zip_safe=True,
       py_modules=['wee'],
-      install_requires=["webob"],
+      install_requires=["webob", "venusian"],
       entry_points=""" """,
       )
