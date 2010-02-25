@@ -1,7 +1,6 @@
 from tests import BaseCase
 from webob import exc
-from webtest import TestApp, AppError
-import functools
+from webtest import TestApp
 import wee 
 
 
@@ -15,7 +14,7 @@ def redirect(request):
     raise exc.HTTPFound(location="http://over-here")
 
 
-application = functools.partial(wee.handle_request, module=__name__)
+application = wee.make_app()
 
 
 class TestExceptions(BaseCase):
