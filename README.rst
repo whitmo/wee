@@ -91,6 +91,11 @@ in the same process without clobbering each other.
 We don't give you are run command either, nor any adapters for popular
 frameworks. Maybe later.
 
+Coverage
+========
+
+coverage.py says 100% currently, but we could have more unittests
+vs. stack tests.
 
 
 Wait I'm Confused ...
