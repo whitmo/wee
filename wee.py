@@ -77,22 +77,22 @@ class Resource(object):
     Base class for rest handling
     """
     
-    subtype = "item"
+    subtype = "item_id"
 
     def __init__(self, request, **group):
         for key, val in group.items():
             setattr(self, key, val)
     
-    def get(self, request):
+    def get(self):
         raise NotImplementedError
 
-    def post(self, request):
+    def post(self):
         raise NotImplementedError
 
-    def put(self, request):
+    def put(self):
         raise NotImplementedError
 
-    def delete(self, request):
+    def delete(self):
         raise NotImplementedError
 
 
