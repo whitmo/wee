@@ -48,6 +48,38 @@ much the same as itty except we use full regex strings::
      srv.serve_forever()
 
 
+Experimental REST Container support
+===================================
+
+There is some rough support for creating simple CRUD containers like
+so::
+
+     import wee
+     
+     @wee.rest("^/candymountain")
+     class UnicornStable(wee.Resource):
+         subtype = 'unicorn_id'
+         def get(self):
+             ... your list of unicorns ...
+
+         def post(self):
+             name = self.request.POST['unicorn-name']
+             ... make a unicorn ...
+    
+         def getitem(self, unicorn_id):
+             ... serve a unicorn ...
+
+         def put(self, unicorn_id):
+             ... change a unicorn ...
+
+         def delete(self, unicorn_id):
+             ... kill a unicorn ...
+
+
+The rest verb generates a series of regexes to dispatch upon for the
+appropriate verbs with a special care to separate 'get' (/) and
+'getitem' (/some_id).
+
 
 Other Differences from itty
 ===========================
@@ -55,9 +87,6 @@ Other Differences from itty
 The only other main difference is that dispatch is scoped by the
 module that defines the handler.  This means multiple wee apps can run
 in the same process without clobbering each other.  
-
-We still cannot define multiple apps in the same module, but hey, this
-isn't suppose to be fancy, it's `wee`.
 
 We don't give you are run command either, nor any adapters for popular
 frameworks. Maybe later.
