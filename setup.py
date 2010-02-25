@@ -4,7 +4,7 @@ version = '0.1'
 
 setup(name='wee',
       version=version,
-      description="like itty but uses werkzeung or webob requests",
+      description="like itty but uses webob request, response and exception objects",
       long_description=open('README.rst').read(),
       classifiers=[], 
       keywords='web wsgi',
