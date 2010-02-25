@@ -1,7 +1,7 @@
 from webtest import TestApp
-import functools
 import unittest
 import webob
+from pprint import pprint
 import wee 
 
 
@@ -25,7 +25,13 @@ class BaseCase(unittest.TestCase):
         assert have == want, "\n%s != \n%s" %(have, want) 
 
 
-application = functools.partial(wee.handle_request, module='tests')
+
+reg = wee.DispatchRegistry()
+application = wee.make_app(registry=reg, walk=False)
+
+def test_reg_consitency():
+    for module, patt in reg['GET'].keys():
+        assert module == 'tests', "Scanning is walking more than just this module"
 
 
 class TestWee(BaseCase):
@@ -45,8 +51,9 @@ class TestWee(BaseCase):
         self.cmp(res.status, '200 OK')
         self.cmp(res.body, "I'm a post") 
 
-new_reg = wee.DispatchRegistry()
-sandboxed = wee.make_app(registry=new_reg)
+
+sandboxed = wee.make_app()
+
 
 class TestSBWee(TestWee):
     app = TestApp(sandboxed)
@@ -55,7 +62,12 @@ class TestSBWee(TestWee):
 class TestSimpleAppFactory(BaseCase):
 
     def test_self_scoping(self):
-        app = TestApp(wee.make_app())
+        app = TestApp(wee.make_app(registry=wee.DispatchRegistry()))
         self.cmp(app.get("/").status, "200 OK")
+
+
+
+
+
 
             
