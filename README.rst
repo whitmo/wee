@@ -3,8 +3,9 @@
 =====
 
 You could call it Webob augmented `itty
-<http://github.com/toastdriven/itty/>`_ .  It borrows heavily from
-itty but allow for the use of a passed in Request or Response object
+<http://github.com/toastdriven/itty/>`_ .  It borrows it's form but
+allow for the use of a passed in Request or Response object. By
+default, it uses the Request and Response from WebOb, as well as WebOb's.
 
 
 Why?
@@ -46,6 +47,22 @@ much the same as itty except we use full regex strings::
 
      srv = make_server(host, port, wee.make_app())
      srv.serve_forever()
+
+
+Using a prefix
+==============
+
+Sometimes you want to hang a wee app on an existing app tree::
+
+    import wee
+
+    @wee.get('^/$')
+    def logical_root(request):
+        return "I'm an index"
+
+    registry = wee.PrefixRegistry(prefix='/my/crazy/existing/dispatch/tree')
+
+    wee.make_app(registry=prefix)
 
 
 Experimental REST Container support
