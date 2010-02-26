@@ -123,11 +123,17 @@ class DispatchRegistry(dict):
         for verb in self.verb:
             self[verb]=dict()
 
-    def __call__(self, request):
+    def search(self, regex, request):
+        """
+        Template method
+        """
+        return regex.search(request.environ['PATH_INFO'])
+
+    def dispatch(self, request):
         verb = self.get(request.method)
         for key in verb:
             source, regex, = key
-            match = regex.search(request.environ['PATH_INFO'])
+            match = self.search(regex, request)
             handler = verb[key]
             if match is not None:
                 group = match.groupdict()
@@ -137,6 +143,13 @@ class DispatchRegistry(dict):
                     new_args = [group.get(arg) for arg in args if group.get(arg)]
                     return handler(instance, *new_args)
                 return handler(request, **group)
+
+    def __call__(self, request):
+        return self.dispatch(request)
+
+
+class PrefixedRegistry(DispatchRegistry):
+    pass
 
 
 
