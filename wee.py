@@ -148,9 +148,28 @@ class DispatchRegistry(dict):
         return self.dispatch(request)
 
 
-class PrefixedRegistry(DispatchRegistry):
-    pass
+class PrefixRegistry(DispatchRegistry):
 
+    def __init__(self, prefix, strict=True):
+        super(PrefixRegistry, self).__init__()
+        self.prefix = prefix
+        self.strict = strict
+        if isinstance(prefix, basestring):
+            self.prefix = [x for x in prefix.split('/') if x]
+
+    def search(self, regex, request):
+        pi = request.environ['PATH_INFO']
+        if not pi.startswith('/'):
+            pi = '/' + pi
+        return regex.search(pi)
+
+    def __call__(self, request):
+        for element in self.prefix:
+            path_sub = request.path_info_pop()
+            if self.strict is True and path_sub != element:
+                raise ValueError("path element: %s does not match prefix element: %s"\
+                                 %(path_sub, element))
+        return self.dispatch(request)
 
 
 def handle_request(environ, start_response, dispatch=None, module=None, 
@@ -166,7 +185,8 @@ def handle_request(environ, start_response, dispatch=None, module=None,
     except exc.WSGIHTTPException, e:
         return e(environ, start_response)
     except Exception, e:
-        return exc.HTTPServerError('Server Error')
+        #return exc.HTTPServerError('Server Error')
+        raise
     
     if isinstance(response, basestring):
         response = response_class(response)
@@ -189,13 +209,16 @@ def make_app(module=None, registry=None, walk=False):
 
 
 def scan_module(module_name, registry=None, walk=False):
-    mods = module_name.split('.')
     name = []
     if registry is None:
         registry = DispatchRegistry()
-    if len(mods) > 1:
-        name = mods[:-1]
-    module_obj = __import__(module_name, globals(), locals(), name, -1)
+
+    module_obj = module_name
+    if not inspect.ismodule(module_name):
+        mods = module_name.split('.')
+        if len(mods) > 1:
+            name = mods[:-1]        
+        module_obj = __import__(module_name, globals(), locals(), name, -1)
     scan = WeeScanner(registry=registry, walk=walk).scan
     scan(module_obj)
     return registry

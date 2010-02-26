@@ -66,7 +66,13 @@ class TestSimpleAppFactory(BaseCase):
         self.cmp(app.get("/").status, "200 OK")
 
 
+class TestScannerWalk(BaseCase):
+    def test_self_scoping(self):
+        import scan_test
+        app = TestApp(wee.make_app(module=scan_test, walk=True))
+        self.cmp(app.get("/").status, "200 OK")
 
+        self.cmp(app.get("/other").status, "200 OK")
 
 
 
