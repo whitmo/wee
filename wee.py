@@ -227,10 +227,12 @@ def scan_module(module_name, registry=None, walk=False):
 class WeeScanner(venusian.Scanner):
 
     def invoke(self, name, ob):
-        callbacks = getattr(ob, venusian.ATTACH_ATTR, None)
-        if callbacks is not None:
-            for callback in callbacks:
-                callback(self, name, ob)
+        callback_map = getattr(ob, venusian.ATTACH_ATTR, None)
+        if callback_map is not None:
+            for gen in ((callback(self, name, ob) for callback in callbacks) \
+                        for key, callbacks in callback_map.items()):
+                for res in gen:
+                    pass
         
     def scan(self, package):
         """ Scan a Python package and any of its subpackages.  All
